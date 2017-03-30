@@ -1,6 +1,6 @@
 {
-    "name": "simple-log",
-    "version": "0.1.0",
+    "name": "rf-log",
+    "version": "0.1.1",
     "description": "Simple NodeJS logging lib - no dependencys. Colored console.log or log to files. Default logging functions: info, success, waring, error. Custom functions can be added. Display prefix and time for the logs.",
     "author": "Rapidfacture GmbH",
     "license": "MIT",
@@ -8,5 +8,5 @@
         "type": "git",
         "url": "git@github.com:RAPIDFACTURE/simple-log.git"
     },
-    "main": "index.js",
+    "main": "index.js"
 }

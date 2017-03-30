@@ -1,13 +1,19 @@
-# simple-log
+# rf-log
+
+* Simple NodeJS logging lib - no dependencys.
+* Colored console.log or log to files.
+* Default logging functions: info, success, waring, error.
+* Custom functions can be added.
+* Display prefix and time for the logs.
 
 ## Getting Started
 
-> npm install simple-log
+> npm install rf-log
 
-<img src="defaultFunctions.png" style="margin:20px"/>
+![log-simple example](defaultFunctions.png)
 
 ```js
-var log = require(simple-log);
+var log = require(rf-log);
 log.options.mainPrefix = "[SYSTEM-XY]"; // set options
 
 // you are ready to use
@@ -20,10 +26,11 @@ log.error("short logs are nice - icons are shorter the words like 'error'");
 
 ## Further Options
 
-<img src="logExample.png" style="margin:20px"/>
+![log-simple example](logExample.png)
+
 
 ```js
-var log = require(simple-log);
+var log = require(rf-log);
 
 log.info("does this work?");
 
@@ -42,7 +49,7 @@ log.customLoggingFunction("customLog", {"hello World2": 123});
 ### Log to one file
 
 ```js
-var log = require(simple-log);
+var log = require(rf-log);
 
 log.options.logFile = __dirname +  "/log.txt";
 log.success("this works", {"hello": "world"});
@@ -52,7 +59,7 @@ log.success("this works", {"hello": "world"});
 ### Log to several files (separate Error file)
 
 ```js
-var log = require(simple-log);
+var log = require(rf-log);
 
 // overwrite default error function
 log.addLoggingFunction("error", "\x1b[31m", "✘",  __dirname +  "/errors.txt");
@@ -106,5 +113,5 @@ BgWhite = "\x1b[47m"
 ```
 
 ## Legal Issues
-Licenese: MIT
-Author: Felix Furtmayr
+* Licenese: MIT
+* Author: Felix Furtmayr

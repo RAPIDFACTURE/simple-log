@@ -1,4 +1,4 @@
-// simple-log, a small logging lib for NodeJs
+// rf-log, a small logging lib for NodeJs
 var fs = require('fs');
 
 module.exports = {
