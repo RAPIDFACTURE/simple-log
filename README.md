@@ -2,7 +2,7 @@
 
 * Simple NodeJS logging lib - no dependencys.
 * Colored console.log or log to files.
-* Default logging functions: info, success, waring, error.
+* Default logging functions: info, success, warning, error.
 * Custom functions can be added.
 * Display prefix and time for the logs.
 
