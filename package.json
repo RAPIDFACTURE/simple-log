@@ -6,7 +6,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "http://192.168.168.61/Felix/ERP.git"
+        "url": "git@github.com:RAPIDFACTURE/simple-log.git"
     },
     "main": "index.js",
 }
