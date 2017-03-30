@@ -1,0 +1,12 @@
+{
+    "name": "simple-log",
+    "version": "0.1.0",
+    "description": "Simple NodeJS logging lib - no dependencys. Colored console.log or log to files. Default logging functions: info, success, waring, error. Custom functions can be added. Display prefix and time for the logs.",
+    "author": "Rapidfacture GmbH",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "http://192.168.168.61/Felix/ERP.git"
+    },
+    "main": "index.js",
+}
