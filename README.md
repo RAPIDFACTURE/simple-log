@@ -20,7 +20,7 @@ log.options.mainPrefix = "[SYSTEM-XY]"; // set options
 log.success("Use the default functions here.");
 log.info("The mainPrefix before is usefull - tells who loggs");
 log.warning("Optionals use 'time' option");
-log.error("short logs are nice - icons are shorter the words like 'error'");
+log.error("short logs are nice - icons are shorter than words like 'error'");
 
 ```
 
