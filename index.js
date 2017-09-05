@@ -4,6 +4,9 @@ var fs = require('fs');
 module.exports = {
 
   // default logging functions
+  info: function() {
+    log(arguments, "\x1b[34m", "ℹ︎");
+  },
   success: function() {
     log(arguments, "\x1b[32m", "✔");
   },
@@ -13,8 +16,8 @@ module.exports = {
   error: function() {
     log(arguments, "\x1b[31m", "✘");
   },
-  info: function() {
-    log(arguments, "\x1b[34m", "ℹ︎");
+  critical: function() {
+     throw new Error(log(arguments, "\x1b[31m", "✘"));
   },
 
   addLoggingFunction: function(name, color, prefix, toFilePath) {

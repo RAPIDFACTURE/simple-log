@@ -20,7 +20,9 @@ log.options.mainPrefix = "[SYSTEM-XY]"; // set options
 log.success("Use the default functions here.");
 log.info("The mainPrefix before is usefull - tells who loggs");
 log.warning("Optionals use 'time' option");
-log.error("short logs are nice - icons are shorter than words like 'error'");
+log.error("short logs are nice - icons are shorter then words like 'error'");
+log.critical("same as 'error', but also throws an Error and stops your app");
+
 
 ```
 
@@ -111,6 +113,11 @@ BgMagenta = "\x1b[45m"options.
 BgCyan = "\x1b[46m"
 BgWhite = "\x1b[47m"
 ```
+## Testing
+Run the test script:
+> node test.js
+
+Please also lint the file using jshint.
 
 ## Legal Issues
 * Licenese: MIT
