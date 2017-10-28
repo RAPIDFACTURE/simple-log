@@ -18,7 +18,10 @@
   "globals": {
     "document": false,
     "navigator": false,
-    "window": false
+    "window": false,
+    "app": false,
+    "WebSocket": false,
+    "alert": false
   },
 
   "rules": {
@@ -94,7 +97,7 @@
     "no-mixed-spaces-and-tabs": "error",
     "no-multi-spaces": "error",
     "no-multi-str": "error",
-    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
+    "no-multiple-empty-lines": ["error", { "max": 3, "maxEOF": 0 }],
     "no-negated-in-lhs": "error",
     "no-new": "error",
     "no-new-func": "error",
@@ -141,7 +144,6 @@
     "no-whitespace-before-property": "error",
     "no-with": "error",
     "object-property-newline": ["error", { "allowMultiplePropertiesPerLine": true }],
-    "one-var": ["error", { "initialized": "never" }],
     "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before" } }],
     "padded-blocks": ["error", { "blocks": "never", "switches": "never", "classes": "never" }],
     "prefer-promise-reject-errors": "error",

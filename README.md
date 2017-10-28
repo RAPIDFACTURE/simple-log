@@ -117,7 +117,7 @@ BgWhite = "\x1b[47m"
 Run the test script:
 > node test.js
 
-Please also lint the file using jshint.
+Please also lint the file using eslint.
 
 ## Legal Issues
 * Licenese: MIT
