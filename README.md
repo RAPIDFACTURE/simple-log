@@ -113,11 +113,15 @@ BgMagenta = "\x1b[45m"options.
 BgCyan = "\x1b[46m"
 BgWhite = "\x1b[47m"
 ```
-## Testing
-Run the test script:
-> node test.js
+## Development
 
-Please also lint the file using eslint.
+> npm install
+
+To be able to run grunt-eslint.
+
+## Testing
+grunt-eslint and the test script run on `npm test`.
+
 
 ## Legal Issues
 * Licenese: MIT

@@ -7,6 +7,7 @@ module.exports = {
    info: function () {
       log(arguments, '\x1b[34m', 'ℹ︎')
    },
+
    success: function () {
       log(arguments, '\x1b[32m', '✔')
    },
