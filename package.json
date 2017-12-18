@@ -6,7 +6,7 @@
    "license": "MIT",
    "repository": {
       "type": "git",
-      "url": "git@github.com:RAPIDFACTURE/simple-log.git"
+      "url": "git@github.com:RAPIDFACTURE/rf-log.git"
    },
    "main": "index.js",
    "scripts": {
