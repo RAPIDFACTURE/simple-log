@@ -45,21 +45,20 @@ log.critical("same as 'error', but also throws an Error and stops your app");
  */
 
 // start the logger and tell it the name of your lib
-var moduleName = '[DB-module]'
-var log = require('rf-log').customPrefixLogger(moduleName)
+var log = require('rf-log').customPrefixLogger('[DB-module]')
 
 
-// now use it somewhere
-// no need to mention in your logging messages, that this is the `DB Module`
+// use it. never mention `DB Module` again - `rf-log` does this fo you.
 log.success('connceted')
 
 log.info('receiving data')
 
 log.error('connection refusing')
 
+```
 In bigger projects an additional prefix for each module enables you to find errors faster. It also prevents unnecessary repeating of the module name in a library in logging messages.
 
-```
+
 
 ## Further Options
 
