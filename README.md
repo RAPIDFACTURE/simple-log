@@ -26,6 +26,41 @@ log.critical("same as 'error', but also throws an Error and stops your app");
 
 ```
 
+
+### Custom prefix logger
+
+![log-simple example](customPrefix.png)
+
+In projects bigger an additional prefix for each module enables you to find errors faster. On the other side it prevents that you repeat the module name unnecessary in a library.
+
+**Example for one library in your code**
+
+```js
+// NOTE: a main prefix has already been set before somewhere else to '[yourProcess]'
+
+
+/** DB Module
+ * @desc your super fast and cool db module
+ * @version 0.0.3
+ */
+
+// start the logger and tell it the name of your lib
+var moduleName = '[DB-module]'
+var log = require('rf-log').customPrefixLogger(moduleName)
+
+
+// now use it somewhere
+// no need to mention in your logging messages, that this is the `DB Module`
+log.success('connceted')
+
+log.info('receiving data')
+
+log.error('connection refusing')
+
+
+
+```
+
 ## Further Options
 
 ![log-simple example](logExample.png)
@@ -47,11 +82,6 @@ log.addLoggingFunction("customLoggingFunction", "\x1b[41m", "✘");
 log.customLoggingFunction("customLog", {"hello World2": 123});
 
 ```
-
-### Custom prefix logger
-
-In projects bigger an additional prefix for each module enables you to find errors faster.
-
 
 ### Log to one file
 
@@ -80,22 +110,24 @@ log.success("But only errors! Success is still on console");
 ## Options
 
 ```js
-options: {
+var options = require(rf-log).options;
+// the object is in every `require(rf-log)` present and looks like:
+{
     mainPrefix: "",
     time: false,
     logFile: false,
     carriageReturn: true
 }
+
 ```
 
-## Development
+## Development and Testing
 
 > npm install
 
-To be able to run grunt-eslint.
+To be able to run grunt-eslint. Run a test script and `eslint` with:
 
-## Testing
-grunt-eslint and the test script run on `npm test`.
+> `npm test`
 
 
 ## Legal Issues
