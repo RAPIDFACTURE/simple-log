@@ -1,10 +1,14 @@
 # rf-log
 
 * Simple NodeJS logging lib - no dependencys.
-* Colored console.log or log to files.
-* Default logging functions: info, success, warning, error.
-* Custom functions can be added.
-* Display prefix and time for the logs.
+* Ready to use, little configuration.
+* Default logging functions: info, success, warning, error
+* Colored console.log with symbol prefixes
+* Display a main prefix for your projects like `[ProcessXY]`
+* Display a prefix for each of your libs in a projects like `[ProcessXY][DB Module]`
+* Time logging option
+* Log to files option
+* Custom logging functions can be added
 
 ## Getting Started
 
@@ -31,15 +35,11 @@ log.critical("same as 'error', but also throws an Error and stops your app");
 
 ![log-simple example](customPrefix.png)
 
-In projects bigger an additional prefix for each module enables you to find errors faster. On the other side it prevents that you repeat the module name unnecessary in a library.
-
-**Example for one library in your code**
-
 ```js
 // NOTE: a main prefix has already been set before somewhere else to '[yourProcess]'
 
 
-/** DB Module
+/** DB Example Module
  * @desc your super fast and cool db module
  * @version 0.0.3
  */
@@ -57,7 +57,7 @@ log.info('receiving data')
 
 log.error('connection refusing')
 
-
+In bigger projects an additional prefix for each module enables you to find errors faster. It also prevents unnecessary repeating of the module name in a library in logging messages.
 
 ```
 
