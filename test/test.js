@@ -14,7 +14,7 @@ log.error('error')
 var secondPrefix = '[DB-module]'
 console.log('testing the customPrefixLogger functions with secondPrefix ' + secondPrefix)
 var customLog = log.customPrefixLogger(secondPrefix)
-customLog.success('connceted')
+customLog.success('connected')
 customLog.info('receiving data')
 
 
