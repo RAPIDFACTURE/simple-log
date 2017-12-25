@@ -1,29 +1,46 @@
 // rf-log, a small logging lib for NodeJs
 var fs = require('fs')
 
+// console colors
+// see http://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
+var blue = '\x1b[34m',
+   green = '\x1b[32m',
+   yellow = '\x1b[33m',
+   red = '\x1b[31m'
+
+
 module.exports = {
 
    // default logging functions
    info: function () {
-      log(arguments, '\x1b[34m', 'ℹ︎')
+      _log(arguments, blue, 'ℹ︎')
    },
 
    success: function () {
-      log(arguments, '\x1b[32m', '✔')
-   },
-   warning: function () {
-      log(arguments, '\x1b[33m', '⚠︎')
-   },
-   error: function () {
-      log(arguments, '\x1b[31m', '✘')
-   },
-   critical: function () {
-      throw new Error(log(arguments, '\x1b[31m', '✘'))
+      _log(arguments, green, '✔')
    },
 
-   addLoggingFunction: function (name, color, prefix, toFilePath) {
+   warning: function () {
+      _log(arguments, yellow, '⚠︎')
+   },
+
+   error: function () {
+      _log(arguments, red, '✘')
+   },
+
+   critical: function () {
+      throw new Error(_log(arguments, red, '✘'))
+   },
+
+   // add custom logger instance
+   customPrefixLogger: function (prefix) {
+      return new _customPrefixLogger(prefix)
+   },
+
+   // add custom logging function
+   addLoggingFunction: function (name, color, prefix, toFilePath, secondPrefix) {
       this[name] = function () {
-         log(arguments, color, prefix, toFilePath)
+         _log(arguments, color, prefix, toFilePath)
       }
    },
 
@@ -36,7 +53,7 @@ module.exports = {
 }
 
 // main log function
-function log (argumentsArray, color, prefix, toFilePath) {
+function _log (argumentsArray, color, prefix, toFilePath, secondPrefix) {
    var opts = module.exports.options
    var filePath = opts.logFile
    if (toFilePath) filePath = toFilePath
@@ -47,7 +64,8 @@ function log (argumentsArray, color, prefix, toFilePath) {
       args.unshift(new Date().toLocaleString().slice(3, 24))
    }
 
-   args.unshift(opts.mainPrefix)
+   if (secondPrefix) args.unshift(secondPrefix)
+   if (opts.mainPrefix) args.unshift(opts.mainPrefix)
    if (prefix) args.unshift(prefix)
 
    // only for console, not files
@@ -69,4 +87,39 @@ function log (argumentsArray, color, prefix, toFilePath) {
    } else {
       console.log.apply(this, args)
    }
+}
+
+
+// customPrefixLogger: adds a second prefix. Output example:
+//
+// ✘ [ERP][rf-log] customLogger: no secondPrefix defined!
+//
+// idea: configure a custom logger once when starting a module of your code
+// => find errors in the corresponding module faster
+function _customPrefixLogger (secondPrefix) {
+   if (!secondPrefix) logError('customLogger: no secondPrefix defined!')
+   this.secondPrefix = secondPrefix
+   this.info = function () {
+      _log(arguments, blue, 'ℹ︎', null, this.secondPrefix)
+   }
+
+   this.success = function () {
+      _log(arguments, green, '✔', null, this.secondPrefix)
+   }
+
+   this.warning = function () {
+      _log(arguments, yellow, '⚠︎', null, this.secondPrefix)
+   }
+
+   this.error = function () {
+      _log(arguments, red, '✘', null, this.secondPrefix)
+   }
+
+   this.critical = function () {
+      throw new Error(_log(arguments, red, '✘', null, this.secondPrefix))
+   }
+}
+
+function logError () {
+   throw new Error(_log(arguments, red, '✘', '[rf-log]'))
 }

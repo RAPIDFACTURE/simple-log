@@ -48,6 +48,11 @@ log.customLoggingFunction("customLog", {"hello World2": 123});
 
 ```
 
+### Custom prefix logger
+
+In projects bigger an additional prefix for each module enables you to find errors faster.
+
+
 ### Log to one file
 
 ```js

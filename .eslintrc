@@ -50,7 +50,6 @@
     "indent": ["error", 3, { "SwitchCase": 1 }],
     "key-spacing": ["error", { "beforeColon": false, "afterColon": true }],
     "keyword-spacing": ["error", { "before": true, "after": true }],
-    "new-cap": ["error", { "newIsCap": true, "capIsNew": false }],
     "new-parens": "error",
     "no-array-constructor": "error",
     "no-caller": "error",
