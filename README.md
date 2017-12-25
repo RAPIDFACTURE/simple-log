@@ -49,7 +49,7 @@ var log = require('rf-log').customPrefixLogger('[DB-module]')
 
 
 // use it. never mention `DB Module` again - `rf-log` does this fo you.
-log.success('connceted')
+log.success('connected')
 
 log.info('receiving data')
 
