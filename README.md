@@ -126,7 +126,7 @@ var options = require(rf-log).options;
 
 To be able to run grunt-eslint. Run a test script and `eslint` with:
 
-> `npm test`
+> npm test
 
 
 ## Legal Issues
