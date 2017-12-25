@@ -48,7 +48,7 @@ log.critical("same as 'error', but also throws an Error and stops your app");
 var log = require('rf-log').customPrefixLogger('[DB-module]')
 
 
-// use it. never mention `DB Module` again - `rf-log` does this fo you.
+// use it. never mention `DB Module` again. `rf-log` does this for you.
 log.success('connected')
 
 log.info('receiving data')
