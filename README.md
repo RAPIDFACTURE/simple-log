@@ -1,7 +1,7 @@
 # rf-log
 
-* Simple NodeJS logging lib - no dependencys.
-* Ready to use, little configuration.
+* Simple NodeJS logging lib - no dependencys
+* Ready to use, little configuration
 * Default logging functions: info, success, warning, error
 * Colored console.log with symbol prefixes
 * Display a main prefix for your projects like `[ProcessXY]`
