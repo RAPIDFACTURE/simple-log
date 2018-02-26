@@ -1,6 +1,6 @@
 {
    "name": "rf-log",
-   "version": "0.1.5",
+   "version": "0.1.6",
    "description": "Simple NodeJS logging lib - no dependencys. Colored console.log or log to files. Default logging functions: info, success, waring, error. Custom functions can be added. Display prefix and time for the logs.",
    "author": "Rapidfacture GmbH",
    "license": "MIT",
@@ -10,7 +10,7 @@
    },
    "main": "index.js",
    "scripts": {
-      "prepublish": "sh test/isRepoClean && npm test",
+      "prepublish": "npm test",
       "test": "grunt && node test/test.js"
    },
    "devDependencies": {
