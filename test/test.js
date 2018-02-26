@@ -1,8 +1,6 @@
-var log = require('../index.js');
-
-
 var prefix = '[rf-log]';
-log.options.mainPrefix = prefix;
+var log = require('../index.js').start(prefix);
+
 console.log('set mainPrefix: ' + prefix, 'and test the standard functions:');
 log.info('info');
 log.success('success');
