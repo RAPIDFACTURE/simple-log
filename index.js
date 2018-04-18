@@ -6,7 +6,8 @@ var fs = require('fs');
 var blue = '\x1b[34m',
    green = '\x1b[32m',
    yellow = '\x1b[33m',
-   red = '\x1b[31m';
+   red = '\x1b[31m',
+   black = '\x1b[0m';
 
 
 module.exports = {
@@ -79,7 +80,7 @@ function _log (argumentsArray, color, prefix, toFilePath, secondPrefix) {
    if (!filePath) {
       args.unshift(color); // turn on colored text at the beginning;
       if (opts.carriageReturn) args.unshift('\r'); // start at the beginning of the line
-      args.push('\x1b[0m'); // reset message color to black at end;
+      args.push(black); // reset message color to black at end;
    }
 
    if (filePath) {
