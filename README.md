@@ -77,7 +77,7 @@ log.options.time = true; // set option
 log.success("this works also with time");
 
 // add custom loggin function; (name, color, prefix, filePath)
-log.addLoggingFunction("customLoggingFunction", "\x1b[41m", "✘");
+log.addLoggingFunction('customLogging', {color: '\x1b[35m', prefix: 'x'});
 log.customLoggingFunction("customLog", {"hello World2": 123});
 
 ```
@@ -87,7 +87,7 @@ log.customLoggingFunction("customLog", {"hello World2": 123});
 ```js
 var log = require(rf-log);
 
-log.options.logFile = __dirname +  "/log.txt";
+log.options.logFilePath = __dirname +  "/log.txt";
 log.success("this works", {"hello": "world"});
 
 ```
@@ -98,7 +98,7 @@ log.success("this works", {"hello": "world"});
 var log = require(rf-log);
 
 // overwrite default error function
-log.addLoggingFunction("error", "\x1b[31m", "✘",  __dirname +  "/errors.txt");
+log.addLoggingFunction('error', {color: '\x1b[31m', prefix: 'x', logFilePath: __dirname +  "/errors.txt"});
 
 log.error("errors in separate file");
 log.success("But only errors! Success is still on console");
@@ -112,13 +112,28 @@ log.success("But only errors! Success is still on console");
 var options = require(rf-log).options;
 // the object is in every `require(rf-log)` present and looks like:
 {
-    mainPrefix: "",
-    time: false,
-    logFile: false,
-    carriageReturn: true
+   mainPrefix: '',
+   time: false,
+   timeLocale: 'en-US',
+   timeOptions: { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' },
+   logFilePath: '',
+   carriageReturn: true,
+   showTimeOnError: true
 }
 
 ```
+### Docs of time options
+The lib uses Date.toLocaleString to create a time log.
+https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
+
+### Docs of color options
+http://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
+
+
+## How the lib works - creation of the strings
+Each string is built in the following pattern:
+
+prefix + mainPrefix + secondPrefix + time + argumentsToLog
 
 ## Development and Testing
 
