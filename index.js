@@ -21,23 +21,23 @@ module.exports = {
 
    // default logging functions
    info: function () {
-      _log(arguments, blue, 'ℹ︎');
+      _log(arguments, {color: blue, prefix: 'ℹ︎'});
    },
 
    success: function () {
-      _log(arguments, green, '✔');
+      _log(arguments, {color: green, prefix: '✔'});
    },
 
    warning: function () {
-      _log(arguments, yellow, '⚠︎');
+      _log(arguments, {color: yellow, prefix: '⚠︎'});
    },
 
    error: function () {
-      _log(arguments, red, '✘');
+      _log(arguments, {color: red, prefix: '✘', error: true});
    },
 
    critical: function () {
-      throw new Error(_log(arguments, red, '✘'));
+      throw new Error(_log(arguments, {color: red, prefix: '✘', error: true}));
    },
 
    // add custom logger instance
@@ -46,53 +46,64 @@ module.exports = {
    },
 
    // add custom logging function
-   addLoggingFunction: function (name, color, prefix, toFilePath, secondPrefix) {
+   addLoggingFunction: function (name, options) {
       this[name] = function () {
-         _log(arguments, color, prefix, toFilePath);
+         _log(arguments, options);
+         // _log(arguments, color, prefix, toFilePath, secondPrefix);
       };
    },
+
+   // date options on: https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
 
    options: {
       mainPrefix: '',
       time: false,
-      logFile: '',
-      carriageReturn: true
+      timeLocale: 'en-US',
+      timeOptions: { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' },
+      logFilePath: '',
+      carriageReturn: true,
+      showTimeOnError: true
    }
 };
 
 // main log function
-function _log (argumentsArray, color, prefix, toFilePath, secondPrefix) {
-   var opts = module.exports.options;
-   var filePath = opts.logFile;
-   if (toFilePath) filePath = toFilePath;
+function _log (argumentsArray, options) {
+
+   // merge options
+   var opts = options || {};
+   for (var key in module.exports.options) {
+      if (!options[key]) options[key] = module.exports.options[key];
+   }
 
    var args = [].slice.apply(argumentsArray); // convert arguments to an array
 
-   if (opts.time) {
-      args.unshift(new Date().toLocaleString().slice(3, 24));
+   // show time: always or on errors
+   if (opts.time || (opts.error && opts.showTimeOnError)) {
+      args.unshift(new Date().toLocaleString(opts.timeLocale, opts.timeOptions));
    }
 
-   if (secondPrefix) args.unshift(secondPrefix);
+   if (opts.secondPrefix) args.unshift(opts.secondPrefix);
    if (opts.mainPrefix) args.unshift(opts.mainPrefix);
-   if (prefix) args.unshift(prefix);
+   if (opts.prefix) args.unshift(opts.prefix);
 
-   // only for console, not files
-   if (!filePath) {
-      args.unshift(color); // turn on colored text at the beginning;
-      if (opts.carriageReturn) args.unshift('\r'); // start at the beginning of the line
-      args.push(black); // reset message color to black at end;
-   }
 
-   if (filePath) {
+   // log to file
+   if (opts.logFilePath) {
       var string = '';
       args.forEach(function (arg) {
          string += arg;
       });
       string += '\n'; // linebreak
-      fs.appendFile(filePath, string, function (err) {
+      fs.appendFile(opts.logFilePath, string, function (err) {
          if (err) throw err;
       });
+
+   // log to console
    } else {
+      args.unshift(opts.color); // turn on colored text at the beginning;
+      if (opts.carriageReturn) args.unshift('\r'); // start at the beginning of the line
+      args.push(black); // reset message color to black at end;
+
       console.log.apply(this, args);
    }
 }
@@ -106,28 +117,27 @@ function _log (argumentsArray, color, prefix, toFilePath, secondPrefix) {
 // => find errors in the corresponding module faster
 function _customPrefixLogger (secondPrefix) {
    if (!secondPrefix) logError('customLogger: no secondPrefix defined!');
-   this.secondPrefix = secondPrefix;
    this.info = function () {
-      _log(arguments, blue, 'ℹ︎', null, this.secondPrefix);
+      _log(arguments, {color: blue, prefix: 'ℹ︎', secondPrefix: secondPrefix});
    };
 
    this.success = function () {
-      _log(arguments, green, '✔', null, this.secondPrefix);
+      _log(arguments, {color: green, prefix: '✔', secondPrefix: secondPrefix});
    };
 
    this.warning = function () {
-      _log(arguments, yellow, '⚠︎', null, this.secondPrefix);
+      _log(arguments, {color: yellow, prefix: '⚠︎', secondPrefix: secondPrefix });
    };
 
    this.error = function () {
-      _log(arguments, red, '✘', null, this.secondPrefix);
+      _log(arguments, {color: red, prefix: '✘', secondPrefix: secondPrefix, error: true});
    };
 
    this.critical = function () {
-      throw new Error(_log(arguments, red, '✘', null, this.secondPrefix));
+      throw new Error(_log(arguments, {color: red, prefix: '✘', secondPrefix: secondPrefix, error: true }));
    };
 }
 
 function logError () {
-   throw new Error(_log(arguments, red, '✘', '[rf-log]'));
+   throw new Error(_log(arguments, {color: red, prefix: '✘', secondPrefix: '[rf-log]', error: true}));
 }

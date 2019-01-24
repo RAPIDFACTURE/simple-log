@@ -18,7 +18,7 @@ customLog.info('receiving data');
 
 console.log('removing main prefix again, testing addLoggingFunction');
 log.options.mainPrefix = null;
-log.addLoggingFunction('customLogging', '\x1b[35m', 'x');
+log.addLoggingFunction('customLogging', {color: '\x1b[35m', prefix: 'x'});
 log.customLogging('test the custom Logging');
 
 
