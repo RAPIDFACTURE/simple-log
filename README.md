@@ -1,107 +1,63 @@
 # rf-log
-
-* Simple NodeJS logging lib - no dependencys
-* Ready to use, little configuration
-* Default logging functions: info, success, warning, error
-* Colored console.log with symbol prefixes
-* Display a main prefix for your projects like `[ProcessXY]`
-* Display a prefix for each of your libs in a projects like `[ProcessXY][DB Module]`
-* Time logging option
-* Log to files option
-* Custom logging functions can be added
-
-## Getting Started
+Simple and Ready logging lib - no dependencys.
 
 > npm install rf-log
 
+## Example 1
 ![log-simple example](defaultFunctions.png)
 
 ```js
-var log = require(rf-log);
-log.options.mainPrefix = "[SYSTEM-XY]"; // set options
+let log = require("rf-log").start("[SYSTEM-XY]");
 
-// you are ready to use
 log.success("Use the default functions here.");
 log.info("The mainPrefix before is usefull - tells who loggs");
 log.warning("Optionals use 'time' option");
 log.error("short logs are nice - icons are shorter than words like 'error'");
 log.critical("same as 'error', but also throws an Error and stops your app");
 
+```
 
+## Example 2
+![log-simple example](logExample.png)
+
+```js
+var log = require("rf-log");
+
+log.info('simple log');
+log.withTime.success('log with time');
+log.options.mainPrefix = '[SYSTEM-XY]';
+log.success('log with prefix, several args', {'hello': 'world'});
 ```
 
 
-### Custom prefix logger
+## Second prefix for libs
+This helps to find the origin of a message faster
 
 ![log-simple example](customPrefix.png)
 
 ```js
-// NOTE: a main prefix has already been set before somewhere else to '[yourProcess]'
+// NOTE: we assume this is a lib, and rf-log was already started in another file with the mainPrefix '[yourProcess]'
 
-
-/** DB Example Module
- * @desc your super fast and cool db module
- * @version 0.0.3
- */
 
 // start the logger and tell it the name of your lib
-var log = require('rf-log').customPrefixLogger('[DB-module]')
+var log = require('rf-log').prefix('[DB-module]')
 
 
-// use it. never mention `DB Module` again. `rf-log` does this for you.
+// no need mention `DB Module` again
 log.success('connected')
-
 log.info('receiving data')
-
 log.error('connection refusing')
 
 ```
-In bigger projects an additional prefix for each module enables you to find errors faster. It also prevents unnecessary repeating of the module name in a library in logging messages.
 
 
-
-## Further Options
-
-![log-simple example](logExample.png)
-
-
-```js
-var log = require(rf-log);
-
-log.info("does this work?");
-
-log.options.mainPrefix = "[SYSTEM-XY]"; // set option
-log.success("this works", {"hello": "world"});
-
-log.options.time = true; // set option
-log.success("this works also with time");
-
-// add custom loggin function; (name, color, prefix, filePath)
-log.addLoggingFunction('customLogging', {color: '\x1b[35m', prefix: 'x'});
-log.customLoggingFunction("customLog", {"hello World2": 123});
-
-```
-
-### Log to one file
+### Log to a file
 
 ```js
 var log = require(rf-log);
 
 log.options.logFilePath = __dirname +  "/log.txt";
 log.success("this works", {"hello": "world"});
-
-```
-
-### Log to several files (separate Error file)
-
-```js
-var log = require(rf-log);
-
-// overwrite default error function
-log.addLoggingFunction('error', {color: '\x1b[31m', prefix: 'x', logFilePath: __dirname +  "/errors.txt"});
-
-log.error("errors in separate file");
-log.success("But only errors! Success is still on console");
 
 ```
 
@@ -117,8 +73,7 @@ var options = require(rf-log).options;
    timeLocale: 'en-US',
    timeOptions: { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' },
    logFilePath: '',
-   carriageReturn: true,
-   showTimeOnError: true
+   carriageReturn: true
 }
 
 ```

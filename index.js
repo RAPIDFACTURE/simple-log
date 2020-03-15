@@ -1,84 +1,100 @@
 // rf-log, a small logging lib for NodeJs
-var fs = require('fs');
+let fs = require('fs');
 
 // console colors
 // see http://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
-var blue = '\x1b[34m',
+let blue = '\x1b[34m',
    green = '\x1b[32m',
    yellow = '\x1b[33m',
    red = '\x1b[31m',
    black = '\x1b[0m';
 
+let consoleOptions = {
+   info: {color: blue, prefix: 'ℹ︎'},
+   success: {color: green, prefix: '✔'},
+   warning: {color: yellow, prefix: '⚠︎'},
+   error: {color: red, prefix: '✘', error: true},
+   critical: {color: red, prefix: '✘', error: 'critical'}
+};
 
-module.exports = {
+let defaultOptions = {
+   // mainPrefix: '',
+   time: false,
+   timeLocale: 'en-US',
+   // date options on: https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
+   timeOptions: { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' },
+   logFilePath: '',
+   carriageReturn: true
+};
 
-   // allow to start the logger with a prefix
-   start: function (mainPrefix) {
-      module.exports.options.mainPrefix = mainPrefix;
-      return module.exports;
-   },
 
+module.exports = newLogFunctions();
+
+
+
+function newLogFunctions (opts, newOpts) {
+   let obj = {};
+   opts = opts || {};
+   newOpts = newOpts || {};
+   opts = JSON.parse(JSON.stringify(opts));
+   newOpts = JSON.parse(JSON.stringify(newOpts));
+   for (let key in newOpts) {
+      opts[key] = newOpts[key];
+   }
+
+   // console.log(opts, newOpts);
+
+   obj.options = opts;
+
+   obj.start = function (mainPrefix, options) {
+      obj.options.mainPrefix = mainPrefix;
+
+      if (!obj.options.time && !obj.withTime) {
+         obj.withTime = (function () {
+            console.log('mainPrefix', obj.options.mainPrefix);
+            return newLogFunctions(obj.options, {time: true});
+         }());
+      }
+
+
+      return obj;
+   };
 
    // default logging functions
-   info: function () {
-      _log(arguments, {color: blue, prefix: 'ℹ︎'});
-   },
-
-   success: function () {
-      _log(arguments, {color: green, prefix: '✔'});
-   },
-
-   warning: function () {
-      _log(arguments, {color: yellow, prefix: '⚠︎'});
-   },
-
-   error: function () {
-      _log(arguments, {color: red, prefix: '✘', error: true});
-   },
-
-   critical: function () {
-      throw new Error(_log(arguments, {color: red, prefix: '✘', error: true}));
-   },
-
-   // add custom logger instance
-   customPrefixLogger: function (prefix) {
-      return new _customPrefixLogger(prefix);
-   },
-
-   // add custom logging function
-   addLoggingFunction: function (name, options) {
-      this[name] = function () {
-         _log(arguments, options);
-         // _log(arguments, color, prefix, toFilePath, secondPrefix);
+   for (let key of ['info', 'success', 'warning', 'error', 'critical']) {
+      obj[key] = function () {
+         let consoleOpts = JSON.parse(JSON.stringify(consoleOptions[key]));
+         consoleOpts = Object.assign(consoleOpts, obj.options);
+         _log(arguments, consoleOpts, obj.options);
       };
-   },
-
-   // date options on: https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
-
-   options: {
-      mainPrefix: '',
-      time: false,
-      timeLocale: 'en-US',
-      timeOptions: { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' },
-      logFilePath: '',
-      carriageReturn: true,
-      showTimeOnError: true
    }
-};
+
+   // add logger instance; example output:
+   // ✘ [ERP][rf-log] test 123!
+   obj.prefix = function (secondPrefix) {
+      if (!secondPrefix) throw new Error('customLogger: no secondPrefix defined!');
+      return newLogFunctions(obj.options, {secondPrefix: secondPrefix});
+   };
+
+   obj.customPrefixLogger = obj.prefix; // for compatibility with older versions
+
+
+   return obj; // clone obj
+}
 
 // main log function
 function _log (argumentsArray, options) {
 
    // merge options
    var opts = options || {};
-   for (var key in module.exports.options) {
-      if (!options[key]) options[key] = module.exports.options[key];
+   for (var key in defaultOptions) {
+      if (!options[key] && options[key] !== false) options[key] = defaultOptions[key];
    }
 
    var args = [].slice.apply(argumentsArray); // convert arguments to an array
 
    // show time: always or on errors
-   if (opts.time || (opts.error && opts.showTimeOnError)) {
+   if (opts.time || opts.error) {
       args.unshift(new Date().toLocaleString(opts.timeLocale, opts.timeOptions));
    }
 
@@ -98,46 +114,20 @@ function _log (argumentsArray, options) {
          if (err) throw err;
       });
 
+      if (options.error === 'critical') {
+         throw new Error(console.log.apply(this, args));
+      }
+
    // log to console
    } else {
       args.unshift(opts.color); // turn on colored text at the beginning;
       if (opts.carriageReturn) args.unshift('\r'); // start at the beginning of the line
       args.push(black); // reset message color to black at end;
 
-      console.log.apply(this, args);
+      if (options.error === 'critical') {
+         throw new Error(console.log.apply(this, args));
+      } else {
+         console.log.apply(this, args);
+      }
    }
-}
-
-
-// customPrefixLogger: adds a second prefix. Output example:
-//
-// ✘ [ERP][rf-log] customLogger: no secondPrefix defined!
-//
-// idea: configure a custom logger once when starting a module of your code
-// => find errors in the corresponding module faster
-function _customPrefixLogger (secondPrefix) {
-   if (!secondPrefix) logError('customLogger: no secondPrefix defined!');
-   this.info = function () {
-      _log(arguments, {color: blue, prefix: 'ℹ︎', secondPrefix: secondPrefix});
-   };
-
-   this.success = function () {
-      _log(arguments, {color: green, prefix: '✔', secondPrefix: secondPrefix});
-   };
-
-   this.warning = function () {
-      _log(arguments, {color: yellow, prefix: '⚠︎', secondPrefix: secondPrefix });
-   };
-
-   this.error = function () {
-      _log(arguments, {color: red, prefix: '✘', secondPrefix: secondPrefix, error: true});
-   };
-
-   this.critical = function () {
-      throw new Error(_log(arguments, {color: red, prefix: '✘', secondPrefix: secondPrefix, error: true }));
-   };
-}
-
-function logError () {
-   throw new Error(_log(arguments, {color: red, prefix: '✘', secondPrefix: '[rf-log]', error: true}));
 }
