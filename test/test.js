@@ -1,5 +1,5 @@
 var prefix = '[rf-log]';
-var log = require('../index.js').start();
+var log = require('../index.js').start(prefix);
 
 console.log('\n\nset mainPrefix: ' + prefix, 'and test the standard functions:');
 log.info('info');
@@ -18,23 +18,23 @@ customLog.info('receiving data again');
 
 
 console.log('\n\nenabling time');
-// direct call
 log.withTime.info('log once with time');
 log.info('log once without time');
-// now put the logger in variable to reuse it
+
+
 let logWithTime = log.withTime;
 logWithTime.success('time is running');
-logWithTime.prefix('[for a lib]').success('with second prefix');
-var newCustomLogger = logWithTime.prefix('[for a new lib]');
-newCustomLogger.info('it works');
+logWithTime.prefix('[helper]').success('with prefix');
+
+var newCustomLogger = logWithTime.prefix('[password]');
+newCustomLogger.info('with another prefix');
 newCustomLogger.options.time = false;
 newCustomLogger.info('it works again without time');
 
-logWithTime.warning('disabling again');
 
-
+console.log('\n\nrequire a second time - for use in a separate lib');
 var log2 = require('../index.js');
-log2.success('require the lib again');
+log2.success('the main prefix should be here again');
 
 
 console.log('\n\nSuccess!\n');
