@@ -51,7 +51,7 @@ function newLogFunctions (opts, newOpts) {
 
       if (!obj.options.time && !obj.withTime) {
          obj.withTime = (function () {
-            console.log('mainPrefix', obj.options.mainPrefix);
+            // console.log('mainPrefix', obj.options.mainPrefix);
             return newLogFunctions(obj.options, {time: true});
          }());
       }
